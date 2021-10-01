@@ -65,9 +65,50 @@ resource "aws_internet_gateway" "myapp-igw" {
     Name : "${var.env_prefix}-igw"
   }
 } 
+
+resource "aws_route_table_association" "a-rtb-subnet" {
+  subnet_id = aws_subnet.myapp-subnet-1.id
+  route_table_id = aws_route_table.myapp-route-table.id
+}
 ```
+
 ![igw-rtb](./images/image-1.png)
 
+## Security Group
 
 
+A security group acts as a virtual firewall for your EC2 instances to control incoming and outgoing traffic. Inbound rules control the incoming traffic to your instance, and outbound rules control the outgoing traffic from your instance. 
 
+Instead of opening port 22 to the world, I have limited it to my home IP and saved it as an environment variable in my **.tfvars** file which I won't commit and push to a public repository.
+
+```terraform
+resource "aws_security_group" "myapp-sg" {
+  name   = "myapp-sg"
+  vpc_id = aws_vpc.myapp-vpc.id
+
+  ingress {
+    from_port  = 22
+    to_port    = 22
+    protocol   = "tcp"
+    cidr_blocks = [var.my_ip]
+  }
+  ingress {
+    from_port  = 8080
+    to_port    = 8080
+    protocol   = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    prefix_list_ids = []
+  }
+  tags = {
+    Name : "${var.env_prefix}-sg"
+  }
+}
+```
+
+![sg](./images/image-2.png)
