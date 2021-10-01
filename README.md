@@ -76,7 +76,6 @@ resource "aws_route_table_association" "a-rtb-subnet" {
 
 ## Security Group
 
-
 A security group acts as a virtual firewall for your EC2 instances to control incoming and outgoing traffic. Inbound rules control the incoming traffic to your instance, and outbound rules control the outgoing traffic from your instance. 
 
 Instead of opening port 22 to the world, I have limited it to my home IP and saved it as an environment variable in my **.tfvars** file which I won't commit and push to a public repository.
@@ -112,3 +111,44 @@ resource "aws_security_group" "myapp-sg" {
 ```
 
 ![sg](./images/image-2.png)
+
+## Ec2 Instance
+
+I have created the EC2 instance by pullling the image **ami** from AWS insted of hard coding in the text editor. This is because AWS and the AWS market place developers keep updating ami's which in turn change the ID's.
+
+```terraform
+data "aws_ami" "latest-amazon-linux-image" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}
+
+
+resource "aws_instance" "myapp-server" {
+  ami           = data.aws_ami.latest-amazon-linux-image.id
+  instance_type = var.instance_type
+
+  subnet_id              = aws_subnet.myapp-subnet-1.id
+  vpc_security_group_ids = [aws_security_group.myapp-sg.id]
+  availability_zone      = var.avail_zone
+
+  associate_public_ip_address = true
+  key_name                    = "fedora"
+
+  tags = {
+    Name : "${var.env_prefix}-server"
+  }
+}
+```
+
