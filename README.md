@@ -66,7 +66,8 @@ resource "aws_internet_gateway" "myapp-igw" {
   }
 } 
 ```
+![igw-rtb](./images/image-1.png)
 
-// Image 1
+
 
 
