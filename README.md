@@ -112,7 +112,7 @@ resource "aws_security_group" "myapp-sg" {
 
 ![sg](./images/image-2.png)
 
-## Ec2 Instance
+## EC2 Instance
 
 I have created the EC2 instance by pullling the image **ami** from AWS insted of hard coding in the text editor. This is because AWS and the AWS market place developers keep updating ami's which in turn change the ID's.
 
@@ -152,3 +152,4 @@ resource "aws_instance" "myapp-server" {
 }
 ```
 
+![ec2](./images/image-3.png)
