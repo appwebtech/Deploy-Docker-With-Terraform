@@ -1,0 +1,10 @@
+.history/*
+
+# Local Terraform directory
+.terraform/*
+
+# Variable files which may include sensitive data
+*.tfvars
+
+# Terraform state backup
+*.tfstate.*
