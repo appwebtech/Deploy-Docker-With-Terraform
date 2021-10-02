@@ -175,15 +175,15 @@ sudo usermod -aG docker ec2-user
 docker run -p 8080:80 nginx
 ```
 
-![ssh](./images/image-5.png
+![ssh](./images/image-5.png)
 
 </hr>
 
-![ssh](./images/image-6.png
+![ssh](./images/image-6.png)
 
 </hr>
 
-![ssh](./images/image-7.png
+![ssh](./images/image-7.png)
 
 There it is. A simple but very realistic configuration of creating an environment with Terraform and deploying a websever using Docker container.
 
