@@ -8,3 +8,6 @@
 
 # Terraform state backup
 *.tfstate.*
+
+# Key file
+*.pem

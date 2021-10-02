@@ -8,6 +8,7 @@ variable "avail_zone" {}
 variable "env_prefix" {}
 variable "my_ip" {}
 variable "instance_type" {}
+/* variable "public_key_location" {} */
 
 # VPC and Subnet
 resource "aws_vpc" "myapp-vpc" {
@@ -18,8 +19,9 @@ resource "aws_vpc" "myapp-vpc" {
 }
 
 resource "aws_subnet" "myapp-subnet-1" {
-  vpc_id     = aws_vpc.myapp-vpc.id
-  cidr_block = var.subnet_cidr_block
+  vpc_id            = aws_vpc.myapp-vpc.id
+  cidr_block        = var.subnet_cidr_block
+  availability_zone = var.avail_zone
   tags = {
     Name : "${var.env_prefix}-subnet-1"
   }
@@ -103,6 +105,11 @@ data "aws_ami" "latest-amazon-linux-image" {
   }
 }
 
+/* resource "aws_key_pair" "ssh-key" {
+  key_name   = "fedora.pem"
+  public_key = file(var.public_key_location)
+}
+ */
 
 resource "aws_instance" "myapp-server" {
   ami           = data.aws_ami.latest-amazon-linux-image.id
@@ -115,6 +122,7 @@ resource "aws_instance" "myapp-server" {
   associate_public_ip_address = true
   key_name                    = "fedora"
 
+  user_data = file("user-data.sh")
   tags = {
     Name : "${var.env_prefix}-server"
   }
@@ -123,4 +131,8 @@ resource "aws_instance" "myapp-server" {
 
 output "aws_ami_id" {
   value = data.aws_ami.latest-amazon-linux-image.id
+}
+
+output "ec2-public-ip" {
+  value = aws_instance.myapp-server.public_ip
 }
