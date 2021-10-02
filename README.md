@@ -162,7 +162,7 @@ I will SSH inside the instance because I have it initialized.
 
 I will be automating the installation process of Docker and Nginx by using a script file, which I have saved as **user-data.sh**. Normally whilst instantiating EC2 instances, the AWS UI grants you the option of using pasting a script in the UI to avoid SSH'ing and running the commands manually online.
 
-In my case I'll create a script file and bind it to the EC2 instance resource code block and execute terraform apply. The script will use them yum package manager to run updates (I'm using Amazon centOS rhel fedora), install docker, start docker, create a group for ec2-user, then run and bind docker on port 8080 from port 80 of the container.
+In my case I'll create a script file and bind it to the EC2 instance resource code block and execute terraform apply. The script will use the yum package manager to run updates (I'm using Amazon centOS rhel fedora), install docker, start docker, create a group for ec2-user, then run and bind docker on port 8080 from port 80 of the container.
 
 User data script;
 
